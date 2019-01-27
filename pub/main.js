@@ -1060,10 +1060,15 @@ window.onload = function () {
     socket.on('placesInfo', function(result) {
         map.setCenter({lat: latlong.lat, lng: latlong.lon});
         map.setZoom(14);
-        console.log(result);
-        for (let place of result) {
+        // console.log(result);
+
+        let chosen = Math.floor(Math.random()*result.length);
+        for (let i = 0; i < result.length; i++) {
+            let place = result[i];
+
             var marker = new google.maps.Marker({position: place.geometry.location, map: map});
-            marker.setOpacity(.5);
+            if (i !== chosen)
+                marker.setOpacity(.25);
 
             let con = document.createElement('div');
 
@@ -1077,6 +1082,10 @@ window.onload = function () {
             let price = document.createElement('p');
 
             con.classList.add('con');
+
+            if (i === chosen)
+                con.classList.add('selected');   
+
             titleBar.classList.add('titleBar');
             title.classList.add('title');
             detail.classList.add('detail');
@@ -1085,7 +1094,7 @@ window.onload = function () {
             rating.classList.add('rating');
             price.classList.add('price');
             
-            detail.appendChild(busyness);
+            // detail.appendChild(busyness);
             detail.appendChild(distance);
             detail.appendChild(rating);
             detail.appendChild(price);
@@ -1096,19 +1105,20 @@ window.onload = function () {
             con.appendChild(detail);
 
             title.innerText = place.name;
-            rating.innerText = place.rating;
-            price.innerText = place.price_level;
+            rating.innerText = "rating: "+place.rating;
+            price.innerText = "price: "+place.price_level;
             
             p1 = {
                 lat: latlong.lat,
                 lng: latlong.lon
             }
             
-            distance.innerText = getDistance(p1, place.geometry.location);
+            distance.innerText = getDistance(p1, place.geometry.location)+" meters";
 
             document.getElementsByClassName('panel-2')[0].appendChild(con);
         }
     });
+    // $('.submit-button ').click();
 }
 
 var rad = function(x) {
@@ -1126,4 +1136,3 @@ var getDistance = function(p1, p2) {
     var d = R * c;
     return d; // returns the distance in meter
 };
-
