@@ -19,7 +19,7 @@ app.get('/', function (req, res) {
   res.sendFile('index.html');
 })
 
-http.listen(port);
+http.listen(process.env.PORT || port);
 
 io.on('connection', function(socket){
     console.log('a user connected');
