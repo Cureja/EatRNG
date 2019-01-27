@@ -1,7 +1,9 @@
 window.onload = function () {
+    var socket = io();
 
     //connect to socket
-    var socket = io();
+
+    var latlong = null;
 
     var dummy = [
         {
@@ -1015,19 +1017,113 @@ window.onload = function () {
         if (navigator.geolocation) {
             console.log("sasdfasdf");
             navigator.geolocation.getCurrentPosition(function(loc) {
-                let latlong = {
+                latlong = {
                     'lat': loc.coords.latitude,
                     'lon': loc.coords.longitude
                 };
-                socket.emit('locUpdate',latlong);
+                
             });
         }
     }
-    
+    var map = null;
+    function initMap() {
+          // The location of Uluru
+        var uluru = {lat: -25.344, lng: 131.036};
+        // The map, centered at Uluru
+        map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 4, center: uluru}
+        );
+    }
+    initMap();
     getLocation();
+    
+    let sliderDistance = new mdc.slider.MDCSlider(document.querySelector('.distance-slider'));
+    sliderDistance.listen('MDCSlider:change', () => console.log(`Value changed to ${sliderDistance.value}`));
+    let sliderRating = new mdc.slider.MDCSlider(document.querySelector('.rating-slider'));
+    sliderRating.listen('MDCSlider:change', () => console.log(`Value changed to ${sliderRating.value}`));
+    let sliderPrice = new mdc.slider.MDCSlider(document.querySelector('.price-slider'));
+    sliderPrice.listen('MDCSlider:change', () => console.log(`Value changed to ${sliderPrice.value}`));
+    
+    $('.submit-button').click(function() {
+        console.log('test');
+        let obj = {
+            dis: sliderDistance.value,
+            rating: sliderRating.value,
+            price: sliderPrice.value,
+            latlong: latlong
+        }
+        
+        socket.emit('submit', obj);
+            
+    });
+    
+    socket.on('placesInfo', function(result) {
+        map.setCenter({lat: latlong.lat, lng: latlong.lon});
+        map.setZoom(14);
+        console.log(result);
+        for (let place of result) {
+            var marker = new google.maps.Marker({position: place.geometry.location, map: map});
+            marker.setOpacity(.5);
 
-    socket.on('placesInfo', function(places) {
-        console.log(places);
+            let con = document.createElement('div');
+
+            let titleBar = document.createElement('div');
+            let title = document.createElement('p');
+
+            let detail = document.createElement('div');
+            let busyness = document.createElement('p');
+            let distance = document.createElement('p');
+            let rating = document.createElement('p');
+            let price = document.createElement('p');
+
+            con.classList.add('con');
+            titleBar.classList.add('titleBar');
+            title.classList.add('title');
+            detail.classList.add('detail');
+            busyness.classList.add('busyness');
+            distance.classList.add('distance');
+            rating.classList.add('rating');
+            price.classList.add('price');
+            
+            detail.appendChild(busyness);
+            detail.appendChild(distance);
+            detail.appendChild(rating);
+            detail.appendChild(price);
+
+            titleBar.appendChild(title);
+
+            con.appendChild(titleBar);
+            con.appendChild(detail);
+
+            title.innerText = place.name;
+            rating.innerText = place.rating;
+            price.innerText = place.price_level;
+            
+            p1 = {
+                lat: latlong.lat,
+                lng: latlong.lon
+            }
+            
+            distance.innerText = getDistance(p1, place.geometry.location);
+
+            document.getElementsByClassName('panel-2')[0].appendChild(con);
+        }
     });
 }
+
+var rad = function(x) {
+    return x * Math.PI / 180;
+  };
+  
+var getDistance = function(p1, p2) {
+    var R = 6378137; // Earth’s mean radius in meter
+    var dLat = rad(p2.lat - p1.lat);
+    var dLong = rad(p2.lng - p1.lng);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(rad(p1.lat)) * Math.cos(rad(p2.lat)) *
+        Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d; // returns the distance in meter
+};
 

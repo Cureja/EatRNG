@@ -6,48 +6,117 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Eat RNG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwwBjqLLz8tF4UBKUQ03dp16uS8i9ZGnw"></script>
     <script src="main.js"></script>
+
 </head>
 
 <body>
     <nav>
         <h1>Eat RNG</h1>
     </nav>
-    <div id = "map"></div>
-    <div class = "settings"> 
-        <div class = "container">
-            <p class = "search_label">
-                Type of Food: 
-            </p>
-            <input class = "text_input" type = "text"></input>
+    <div class="content">
+        <div class="panel-1">
+            <section id="map"></section>
+            <section class="settings">
+                <div class="container">
+                    <p class="search_label">
+                        Type of Food:
+                    </p>
+                    <div class="mdc-form-field">
+                        <div class="mdc-checkbox">
+                            <input type="checkbox" class="mdc-checkbox__native-control" id="checkbox-1" />
+                            <div class="mdc-checkbox__background">
+                                <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+                                    <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59" />
+                                </svg>
+                                <div class="mdc-checkbox__mixedmark"></div>
+                            </div>
+                        </div>
+                        <label for="checkbox-1">Checkbox 1</label>
+                    </div>
+                </div>
+                <div class="container">
+                    <p class="label">
+                        Maximum Distance(m):
+                    </p>
+                    <div class="distance-slider mdc-slider mdc-slider--discrete" tabindex="0" role="slider"
+                        aria-valuemin="100" aria-valuemax="900" aria-valuenow="300" data-step="100" aria-label="Select Value">
+                        <div class="mdc-slider__track-container">
+                            <div class="mdc-slider__track"></div>
+                        </div>
+                        <div class="mdc-slider__thumb-container">
+                            <div class="mdc-slider__pin">
+                                <span class="mdc-slider__pin-value-marker"></span>
+                            </div>
+                            <svg class="mdc-slider__thumb" width="21" height="21">
+                                <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                            </svg>
+                            <div class="mdc-slider__focus-ring"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <p class="slider">
+                        Minimum Rating:
+                    </p>
+                    <div class="rating-slider mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="1"
+                        aria-valuemax="5" aria-valuenow="3" data-step="1" aria-label="Select Value">
+                        <div class="mdc-slider__track-container">
+                            <div class="mdc-slider__track"></div>
+                        </div>
+                        <div class="mdc-slider__thumb-container">
+                            <div class="mdc-slider__pin">
+                                <span class="mdc-slider__pin-value-marker"></span>
+                            </div>
+                            <svg class="mdc-slider__thumb" width="21" height="21">
+                                <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                            </svg>
+                            <div class="mdc-slider__focus-ring"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <p class="label">
+                        Maximum Price:
+                    </p>
+                    <div class="price-slider mdc-slider mdc-slider--discrete" tabindex="0" role="slider" aria-valuemin="1"
+                        aria-valuemax="4" aria-valuenow="3" data-step="1" aria-label="Select Value">
+                        <div class="mdc-slider__track-container">
+                            <div class="mdc-slider__track"></div>
+                        </div>
+                        <div class="mdc-slider__thumb-container">
+                            <div class="mdc-slider__pin">
+                                <span class="mdc-slider__pin-value-marker"></span>
+                            </div>
+                            <svg class="mdc-slider__thumb" width="21" height="21">
+                                <circle cx="10.5" cy="10.5" r="7.875"></circle>
+                            </svg>
+                            <div class="mdc-slider__focus-ring"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="submit-button mdc-button mdc-button--raised mdc-ripple-upgraded">
+                    <span class="mdc-button__label">Button</span>
+                </button>
+            </section>
+
         </div>
-        <div class = "container">
-            <p class = "label">
-                Maximum Distance(m): 
-            </p>
-            <input class = "num_input" type = "text"></input>
-        </div>
-        <div class = "container">
-            <p class = "slider">
-                Minimum Rating:
-            </p>
-            <input class = "num_input" type = "text"></input>
-        </div>
-        <div class = "container">
-            <p class = "label">
-                Maximum Price: 
-            </p>
-            <input class = "slider_input" type = "text"></input>
-        </div>
-    </div>
-    <div class = "results">
-        <div class = "item">
-            <div class = "header"></div>
-            <div class = "body"></div>
+        <div class="panel-2">
+            <section class="results">
+                <div class="item">
+                    <div class="header"></div>
+                    <div class="body"></div>
+                </div>
+            </section>
         </div>
     </div>
 </body>
