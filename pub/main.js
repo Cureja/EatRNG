@@ -1011,17 +1011,15 @@ window.onload = function () {
             "vicinity": "3380 Shrum Lane, Vancouver"
         }
     ];
-
     
     function getLocation() {
         if (navigator.geolocation) {
             console.log("sasdfasdf");
-            navigator.geolocation.getCurrentPosition(function(loc) {
+            jQuery.post( "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCwwBjqLLz8tF4UBKUQ03dp16uS8i9ZGnw", function(success) {
                 latlong = {
-                    'lat': loc.coords.latitude,
-                    'lon': loc.coords.longitude
+                    'lat': success.location.lat,
+                    'lon': success.location.lng
                 };
-                
             });
         }
     }
