@@ -8,12 +8,11 @@ window.onload = function () {
         if (navigator.geolocation) {
             console.log("sasdfasdf");
             navigator.geolocation.getCurrentPosition(function(loc) {
-                console.log(loc);
-                let temp = {
+                let latlong = {
                     'lat': loc.coords.latitude,
                     'lon': loc.coords.longitude
                 };
-                socket.emit('locUpdate',temp);
+                socket.emit('locUpdate',latlong);
             });
         }
     }
