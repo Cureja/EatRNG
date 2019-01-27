@@ -1060,13 +1060,17 @@ window.onload = function () {
         map.setZoom(14);
         // console.log(result);
 
+        document.getElementsByClassName('panel-2')[0].innerHTML = "";
+
         let chosen = Math.floor(Math.random()*result.length);
         for (let i = 0; i < result.length; i++) {
             let place = result[i];
-
+            
             var marker = new google.maps.Marker({position: place.geometry.location, map: map});
             if (i !== chosen)
                 marker.setOpacity(.25);
+            
+            console.log(marker);
 
             let con = document.createElement('div');
 

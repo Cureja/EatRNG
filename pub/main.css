@@ -82,3 +82,9 @@ body > .content {
 .panel-2 > .selected {
     background-color: #fff3;
 }
+
+@media screen and (max-width: 925px) {
+    body > .content {
+        flex-direction: column;
+    }
+}
