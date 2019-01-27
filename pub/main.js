@@ -18,5 +18,9 @@ window.onload = function () {
     }
     
     getLocation();
+
+    socket.on('placesInfo', function(places) {
+        console.log(places);
+    });
 }
 
